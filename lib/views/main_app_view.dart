@@ -16,7 +16,7 @@ class MainAppView extends StatefulWidget {
 class _MainAppViewState extends State<MainAppView> {
   int _currentIndex = 1;
 
-  late List<Widget?> screensList = [
+  late List<Widget> screensList = [
     const ReceiveView(),
     const HomeView(),
     const ProfileView()
@@ -25,11 +25,7 @@ class _MainAppViewState extends State<MainAppView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
+
       body: screensList[_currentIndex],
       extendBody: true,
       bottomNavigationBar: CustomFloatingNavBar(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tt9_betweener_challenge/assets.dart';
+import 'package:tt9_betweener_challenge/controllers/auth_controller.dart';
+import 'package:tt9_betweener_challenge/show_mixin.dart';
 import 'package:tt9_betweener_challenge/views/widgets/custom_text_form_field.dart';
 import 'package:tt9_betweener_challenge/views/widgets/secondary_button_widget.dart';
 
@@ -15,12 +17,36 @@ class RegisterView extends StatefulWidget {
   State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
-  TextEditingController nameController = TextEditingController();
+class _RegisterViewState extends State<RegisterView> with Helpers {
+  late TextEditingController nameController;
 
-  TextEditingController emailController = TextEditingController();
+  late TextEditingController emailController;
 
-  TextEditingController passwordController = TextEditingController();
+  late TextEditingController passwordController;
+
+  late TextEditingController conformationPasswordController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    conformationPasswordController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    conformationPasswordController.dispose();
+    super.dispose();
+  }
+
+  bool checkRegister = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -60,33 +86,76 @@ class _RegisterViewState extends State<RegisterView> {
                     height: 24,
                   ),
                   CustomTextFormField(
-                    controller: nameController,
-                    hint: 'John Doe',
-                    label: 'Name',
-                  ),
+                      controller: nameController,
+                      hint: 'John Doe',
+                      label: 'Name',
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Please enter name';
+                        }
+                      }),
                   const SizedBox(
                     height: 14,
                   ),
                   CustomTextFormField(
-                    controller: emailController,
-                    hint: 'example@gmail.com',
-                    label: 'Email',
-                  ),
+                      controller: emailController,
+                      hint: 'example@gmail.com',
+                      label: 'Email',
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Please enter email';
+                        }
+                      }),
                   const SizedBox(
                     height: 14,
                   ),
                   CustomTextFormField(
-                    controller: passwordController,
-                    hint: 'Enter password',
-                    label: 'password',
+                      controller: passwordController,
+                      hint: 'Enter password',
+                      label: 'password',
+                      password: true,
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Please enter password';
+                        }
+                      }),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  CustomTextFormField(
+                    controller: conformationPasswordController,
+                    hint: 'Enter conformation password',
+                    label: 'conformation password',
                     password: true,
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return 'Please enter password to conformation';
+                      }
+                    },
                   ),
+                // const Center(child: CircularProgressIndicator()),
                   const SizedBox(
                     height: 24,
                   ),
                   SecondaryButtonWidget(
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {}
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          showMessage(context, message: 'Registration...');
+
+                          try {
+                            await register(
+                                nameController.text,
+                                emailController.text,
+                                passwordController.text,
+                                conformationPasswordController.text);
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
+                            print('register successfully');
+                          } catch (e) {
+                          showMessage(context, message: 'Registration failed. Please try again.',error: true);
+                          }
+                        }
                       },
                       text: 'REGISTER'),
                   const SizedBox(

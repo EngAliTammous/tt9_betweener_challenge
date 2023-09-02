@@ -1,6 +1,3 @@
-// To parse this JSON data, do
-//
-//     final link = linkFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -13,8 +10,8 @@ class Link {
   String? title;
   String? link;
   String? username;
-  int? isActive;
-  int? userId;
+  String? isActive;
+  String? userId;
   String? createdAt;
   String? updatedAt;
 
@@ -34,7 +31,7 @@ class Link {
         title: json["title"],
         link: json["link"],
         username: json["username"],
-        isActive: json["isActive"],
+        isActive: json["isActive"] as String?,
         userId: json["user_id"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],

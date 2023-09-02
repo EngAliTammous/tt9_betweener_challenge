@@ -30,7 +30,7 @@ class _LoginViewState extends State<LoginView> {
   void submitLogin() {
     if (_formKey.currentState!.validate()) {
       final body = {
-        'email': emailController.text,
+        'email':  emailController.text,
         'password': passwordController.text
       };
 
@@ -47,6 +47,7 @@ class _LoginViewState extends State<LoginView> {
           content: Text(err.toString()),
           backgroundColor: Colors.red,
         ));
+        print(err);
       });
 
       // Navigator.pushNamed(context, MainAppView.id);
